@@ -1,95 +1,123 @@
-DemoQA Forms — Cypress BDD + POM
-Projeto de automação E2E para o Practice Form do https://demoqa.com/, implementado com:
+📘 README – Projeto de Automação DemoQA (Cypress + Cucumber + POM + API E2E)
+Este repositório contém a implementação completa de testes de automação utilizando:
 
-Cypress (15.x)
-Cucumber (Gherkin) via @badeball/cypress-cucumber-preprocessor
+Cypress 15+
+Cucumber BDD (Badeball Preprocessor)
 Page Object Model (POM)
-Upload de arquivo (nativo selectFile)
+Testes E2E de API (Fluxo contínuo refatorado)
+Testes E2E de UI (Practice Form)
+Upload de arquivo
+Geração dinâmica de dados
 Execução simplificada no Chrome
-Pipeline GitHub Actions
+CI/CD opcional via GitHub Actions
 
+O objetivo do desafio é demonstrar capacidade técnica em automação moderna, organização arquitetural, padronização, boas práticas de QA e abrangência de testes.
 
-Objetivo: preencher o Practice Form com dados aleatórios, fazer upload de um .txt, submeter e validar o modal de confirmação.
+📂1. Estrutura do Projeto
+cypress/
+ ├─ e2e/
+ │   ├─ api/
+ │   │   ├─ bookstore-api.feature       # Feature BDD do fluxo total de API
+ │   │   └─ bookstore-api.steps.js      # Steps API (fluxo contínuo refatorado)
+ │   └─ forms/
+ │       ├─ practice-form.feature       # Feature BDD do formulário
+ │       └─ practice-form.steps.js      # Steps UI
+ │
+ ├─ fixtures/
+ │   └─ prova-upload.txt                # Arquivo usado no upload
+ │
+ ├─ pages/
+ │   ├─ HomePage.js
+ │   ├─ FormsPage.js
+ │   └─ PracticeFormPage.js
+ │
+ ├─ support/
+ │   ├─ commands.js                     # Commands API + Helpers
+ │   └─ e2e.js                          # Import de plugins (Cucumber + Upload)
+ │
+ └─ utils/
+     └─ dataFactory.js                  # Geração de dados aleatórios
 
+      2. Testes de API – Fluxo Único e Contínuo (Parte 1 do Desafio)
+      A feature bookstore-api.feature executa toda a jornada em uma única execução, incluindo:
 
-Sumário
+Criar usuário
+Gerar token
+Validar autorização
+Listar livros disponíveis
+Selecionar 2 livros aleatórios
+Adicioná-los à coleção do usuário
+Validar que os livros foram adicionados
+Imprimir os detalhes no console
 
-#arquitetura--stack
-#pré-requisitos
-#instalação
-#estrutura-de-pastas
-#convenções-bdd--pom
-#comandos-de-execução
-#configurações-principais
-#execução-por-tags-cucumber
-#upload-de-arquivo
-#ci--github-actions
-#boas-práticas
-#troubleshooting
-#padrões-de-contribuição
-#licença
+📄 Feature (resumo)
 
+Cenário: Criar usuário -> Gerar token -> Autorizar -> Listar -> Adicionar livros -> Validar
+  Dado que eu crio um usuário válido para o Book Store
+  Quando eu gero o token de acesso para esse usuário
+  Então o usuário deve estar autorizado na API
+  E eu consulto a lista de livros disponíveis
+  Quando eu adiciono dois livros aleatórios à coleção do usuário
+  Então devo ver os dois livros na coleção e imprimir seus detalhes
 
-Arquitetura & Stack
+  🧩 Implementação (steps) – fluxo contínuo
+Arquivo: cypress/e2e/api/bookstore-api.steps.js
 
-Cypress (test runner)
-Cucumber via @badeball/cypress-cucumber-preprocessor (BDD)
-Esbuild via @bahmutov/cypress-esbuild-preprocessor (preprocessamento de features/steps)
-POM (Page Object Model) para Home, Forms, Practice Form
-Upload nativo (selectFile) ou, opcionalmente, cypress-file-upload
+Mantém estado em memória (userId, token, livros, isbns)
+Usa apenas Custom Commands Cypress
+Usa validações resilientes (200/201, booleano "true"/true)
+Realiza logs amigáveis no console
 
+🖥️ 3. Testes de UI – Practice Form (Parte 2 do Desafio)
+Implementado com:
 
-Referências oficiais:
+Page Objects
+Dados dinâmicos aleatórios
+Upload de arquivo com selectFile()
+Remoção de anúncios flutuantes do DemoQA
+Validação do modal de confirmação
 
-Cypress — Docs: https://docs.cypress.io
-Badeball Cucumber Preprocessor — Docs: https://github.com/badeball/cypress-cucumber-preprocessor
-selectFile (Cypress): https://docs.cypress.io/api/commands/selectfile
+Feature:
+Cenário: Preencher o formulário com valores aleatórios e enviar
 
+O teste cobre:
+✔ First Name
+✔ Last Name
+✔ Email
+✔ Gender
+✔ Mobile
+✔ Datepicker
+✔ Subjects
+✔ Hobbies
+✔ Upload
+✔ Endereço
+✔ Estado + Cidade
+✔ Submit
+✔ Validação do modal
+✔ Fechamento do modal
 
+🔧 5. Requisitos
 
-Pré-requisitos
+Node.js 18+
+npm 9+
+Git
+Ambiente Windows/Mac/Linux
 
-Node.js ≥ 18.x (recomendado LTS)
-npm ≥ 9.x
-Acesso à internet para https://demoqa.com/
+🌱 6. Especificações Técnicas e Boas Práticas
 
-Instalação
-# instalar dependências
-npm i
+✔ Arquitetura POM
+Cada página encapsula elementos, ações e métodos de verificação.
+✔ BDD com Cucumber
+Cenários estruturados em .feature utilizando linguagem Gherkin (pt-BR).
+✔ Custom Commands
+Toda integração com a API ocorre via comandos Cypress (commands.js).
+✔ Dados dinâmicos (Factory)
+Gerador robusto para nomes, e-mails, telefone, endereços.
+✔ Upload de arquivo nativo
+Utilizando cy.selectFile, sem dependências externas.
+✔ Logs inteligentes
 
-Estrutura de pastas
-.
-├─ cypress/
-│  ├─ e2e/
-│  │  └─ forms/
-│  │     ├─ practice-form.feature         # Gherkin (pt)
-│  │     └─ practice-form.steps.js        # Step Definitions do cenário acima
-│  ├─ fixtures/
-│  │  └─ prova-upload.txt                 # Arquivo usado no upload (versionado)
-│  ├─ pages/
-│  │  ├─ HomePage.js
-│  │  ├─ FormsPage.js
-│  │  └─ PracticeFormPage.js
-│  ├─ support/
-│  │  ├─ e2e.js                           # importa commands e plugins
-│  │  └─ commands.js                      # Cypress.Commands.add(...)
-│  └─ utils/
-│     └─ dataFactory.js                   # Geração de dados aleatórios
-├─ .github/
-│  └─ workflows/
-│     └─ cypress.yml                      # Pipeline GitHub Actions (opcional)
-├─ .gitignore
-├─ cypress.config.js
-├─ package.json
-└─ README.md
-
-Convenções BDD + POM
-
-Cada .feature deve ter seu arquivo .steps.js com o mesmo prefixo e preferencialmente na mesma pasta.
-Os steps importam Page Objects e fábricas de dados.
-Page Objects não devem executar cy.* em constructor ou top-level. Usar cy.* apenas dentro de métodos invocados pelos steps.
-Steps nunca ficam em cypress/support/e2e.js. O e2e.js deve conter somente imports.
-
-
-Comandos de execução
-Abrir no Chrome (UI gráfica):
+📄 10. Licença
+Projeto público para fins técnicos, demonstração e avaliação.
+Utilize como referência ou template livremente.
+Para debug e rastreabilidade dos fluxos API.
