@@ -4,7 +4,7 @@ Cypress.Commands.add('hideDemoqaAds', () => {
   cy.window({ log: false }).then((win) => {
     const style = win.document.createElement('style');
     style.innerHTML = `
-      #fixedban, .Advertisement-Section, .adsbygoogle, iframe,
+
       .category-cards .card.mt-4.top-card { display: none !important; visibility: hidden !important; }
       footer { display: none !important; }
     `;
@@ -19,7 +19,7 @@ Cypress.Commands.add('apiCreateUser', ({ userName, password }) => {
     baseUrl: Cypress.env('BOOKSTORE_BASE'),
     headers: { 'Content-Type': 'application/json' },
     body: { userName, password },
-    failOnStatusCode: false // let spec assert details
+    failOnStatusCode: false
   });
 });
 

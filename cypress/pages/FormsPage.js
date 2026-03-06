@@ -4,7 +4,7 @@ export default class FormsPage {
       .should('be.visible')
       .click({ force: true });
   }
-  // alternativa mais estável:
+
   goDirectlyToPracticeForm() {
     cy.visit('/automation-practice-form');
   }
