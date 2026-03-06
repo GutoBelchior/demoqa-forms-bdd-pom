@@ -1,0 +1,17 @@
+{
+  "name": "demoqa-forms-bdd-pom",
+  "private": true,
+  "devDependencies": {
+    "@badeball/cypress-cucumber-preprocessor": "^20.0.5",
+    "@bahmutov/cypress-esbuild-preprocessor": "^2.2.0",
+    "cypress": "^15.11.0",
+    "cypress-file-upload": "^5.0.8",
+    "esbuild": "^0.19.12"
+  },
+  "scripts": {
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
+    "cy:run:feature": "cypress run --spec \"cypress/e2e/**/*.feature\"",
+    "cy:open:feature": "cypress open --e2e --browser chrome"
+  }
+}
